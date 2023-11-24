@@ -4,11 +4,8 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-matplotlib = "*"
-plotly = "*"
-pandas = "*"
-scipy = "*"
 numpy = "*"
+matplotlib = "*"
 
 [dev-packages]
 
