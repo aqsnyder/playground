@@ -11,6 +11,7 @@ openpyxl = "*"
 scikit-learn = "*"
 requests = "*"
 seaborn = "*"
+yfinance = "*"
 
 [dev-packages]
 
