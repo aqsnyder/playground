@@ -18,22 +18,25 @@ WHITE = (255, 255, 255)
 
 # Particle settings
 num_particles = 1000
-positions = np.random.rand(num_particles, 2) * np.array([width, height])
+# Adjust initial positions to be within the channel
+channel_start_x, channel_start_y = 100, 150
+channel_end_x, channel_end_y = 700, 450  # Adjust for a longer and skinnier channel
+positions = np.random.rand(num_particles, 2) * np.array([channel_end_x - channel_start_x, channel_end_y - channel_start_y]) + np.array([channel_start_x, channel_start_y])
 velocities = np.random.rand(num_particles, 2) * 2 - 1  # Random velocities
-particle_radius = 5
+particle_radius = 2
 interaction_radius = 25  # Radius within which particles will interact
 
 # Define the channel walls (fully enclosed) and an obstruction
 channel_walls = [
-    pygame.Rect(100, 100, 600, 10),  # Top wall
-    pygame.Rect(100, 500, 600, 10),  # Bottom wall
-    pygame.Rect(100, 100, 10, 400),  # Left wall
-    pygame.Rect(690, 100, 10, 400),  # Right wall
+    pygame.Rect(channel_start_x, channel_start_y, channel_end_x - channel_start_x, 10),  # Top wall
+    pygame.Rect(channel_start_x, channel_end_y, channel_end_x - channel_start_x, 10),  # Bottom wall
+    pygame.Rect(channel_start_x, channel_start_y, 10, channel_end_y - channel_start_y),  # Left wall
+    pygame.Rect(channel_end_x, channel_start_y, 10, channel_end_y - channel_start_y),  # Right wall
 ]
 
-# Add an obstruction in the middle of the channel
+# Adjust obstruction in the middle of the channel
 obstructions = [
-    pygame.Rect(350, 250, 100, 100),  # Middle obstruction
+    pygame.Rect(350, 250, 50, 100),  # Middle obstruction, adjusted for skinnier channel
 ]
 
 @jit(nopython=True)
@@ -60,17 +63,14 @@ def update_positions():
 
 def apply_forces():
     global positions, velocities
-    # Apply a force in the x-direction to simulate flow, no gravity
-    velocities[:, 0] += 0.05
+    velocities[:, 0] += 0.05  # Apply a force in the x-direction to simulate flow
 
 def channel_and_obstruction_interaction():
     global positions, velocities
-    # Handle interactions with the channel walls
     for wall in channel_walls:
         for i, pos in enumerate(positions):
             if wall.collidepoint(pos[0], pos[1]):
                 velocities[i] *= -1
-    # Handle interactions with the obstructions
     for obstruction in obstructions:
         for i, pos in enumerate(positions):
             if obstruction.collidepoint(pos[0], pos[1]):
@@ -80,10 +80,8 @@ def render():
     screen.fill(BLACK)
     for pos in positions:
         pygame.draw.circle(screen, BLUE, pos.astype(int), particle_radius)
-    # Draw channel walls
     for wall in channel_walls:
         pygame.draw.rect(screen, WHITE, wall)
-    # Draw obstructions
     for obstruction in obstructions:
         pygame.draw.rect(screen, WHITE, obstruction)
     pygame.display.flip()

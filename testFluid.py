@@ -17,11 +17,11 @@ BLUE = (0, 0, 255)
 WHITE = (255, 255, 255)
 
 # Particle settings
-num_particles = 3000
+num_particles = 10000
 positions = np.random.rand(num_particles, 2) * np.array([width, height])
 velocities = np.random.rand(num_particles, 2) * 2 - 1  # Random velocities
-particle_radius = 3
-interaction_radius = 10  # Radius within which particles will interact
+particle_radius = 2
+interaction_radius = particle_radius + (particle_radius * 0.1)  # Radius within which particles will interact
 
 # Obstacle settings
 obstacle = pygame.Rect(width // 2 - 50, height // 2 - 50, 100, 100)
@@ -50,7 +50,7 @@ def update_positions():
 
 def apply_forces():
     global positions, velocities
-    velocities[:, 1] += 0.01  # Simple gravity
+    velocities[:, 1] += 0.00  # Simple gravity
 
 def obstacle_interaction():
     global positions, velocities
@@ -87,7 +87,7 @@ def main_loop():
         obstacle_interaction()
         render()
 
-        clock.tick(60)  # Limit to 60 frames per second
+        clock.tick()  # Limit to 60 frames per second
 
 if __name__ == "__main__":
     main_loop()
