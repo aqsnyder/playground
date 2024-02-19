@@ -5,13 +5,14 @@ name = "pypi"
 
 [packages]
 numpy = "*"
-matplotlib = "*"
 pandas = "*"
 openpyxl = "*"
 scikit-learn = "*"
 requests = "*"
 seaborn = "*"
 yfinance = "*"
+matplotlib = "3.4.3"
+pygame = "*"
 
 [dev-packages]
 
